@@ -46,6 +46,7 @@ typedef int Py_ssize_t;
 #include <ImfCompressionAttribute.h>
 #include <ImfDoubleAttribute.h>
 #include <ImfEnvmapAttribute.h>
+#include <ImfFrameBuffer.h>
 #include <ImfFloatAttribute.h>
 #include <ImfHeader.h>
 #include <ImfInputFile.h>
@@ -89,6 +90,7 @@ typedef int Py_ssize_t;
 #include <iomanip>
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 using namespace Imf;
@@ -121,8 +123,8 @@ class C_IStream: public IStream
     C_IStream (PyObject *fo):
         IStream(""), _fo(fo) {}
     virtual bool    read (char c[], int n);
-    virtual Int64   tellg ();
-    virtual void    seekg (Int64 pos);
+    virtual uint64_t   tellg ();
+    virtual void    seekg (uint64_t pos);
     virtual void    clear ();
     virtual const char*     fileName() const;
   private:
@@ -148,7 +150,7 @@ const char* C_IStream::fileName() const
 }
 
 
-Int64
+uint64_t
 C_IStream::tellg ()
 {
     PyObject *rv = PyObject_CallMethod(_fo, (char*)"tell", NULL);
@@ -157,14 +159,14 @@ C_IStream::tellg ()
       long long t = PyLong_AsLong(lrv);
       Py_DECREF(lrv);
       Py_DECREF(rv);
-      return (Int64)t;
+      return (uint64_t)t;
     } else {
       throw Iex::InputExc("tell failed");
     }
 }
 
 void
-C_IStream::seekg (Int64 pos)
+C_IStream::seekg (uint64_t pos)
 {
     PyObject *data = PyObject_CallMethod(_fo, (char*)"seek", (char*)"(L)", pos);
     if (data != NULL) {
@@ -186,8 +188,8 @@ class C_OStream: public OStream
   public:
     C_OStream (PyObject *fo): OStream(""), _fo(fo) {}
     virtual void    write (const char *c, int n);
-    virtual Int64   tellp ();
-    virtual void    seekp (Int64 pos);
+    virtual uint64_t tellp ();
+    virtual void    seekp (uint64_t pos);
     virtual void    clear ();
     virtual const char*     fileName() const;
   private:
@@ -212,7 +214,7 @@ const char* C_OStream::fileName() const
 }
 
 
-Int64
+uint64_t
 C_OStream::tellp ()
 {
     PyObject *rv = PyObject_CallMethod(_fo, (char*)"tell", NULL);
@@ -221,14 +223,14 @@ C_OStream::tellp ()
       long long t = PyLong_AsLong(lrv);
       Py_DECREF(lrv);
       Py_DECREF(rv);
-      return (Int64)t;
+      return (uint64_t)t;
     } else {
       throw Iex::InputExc("tell failed");
     }
 }
 
 void
-C_OStream::seekp (Int64 pos)
+C_OStream::seekp (uint64_t pos)
 {
     PyObject *data = PyObject_CallMethod(_fo, (char*)"seek", (char*)"(L)", pos);
     if (data != NULL) {
