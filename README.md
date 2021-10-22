@@ -1,6 +1,8 @@
 OpenEXR bindings for Python
 ===========================
 
+Forked from: https://github.com/jamesbowman/openexrpython
+
 Notes on this fork
 ------------------
 
@@ -27,10 +29,10 @@ For the latest release, run:
 
 In case the PyPi package is not updated and you want to install from the master branch, you can do the following:
 
-    pip install git+https://github.com/jamesbowman/openexrpython.git
+    pip install git+https://github.com/afichet/openexrpython.git
 
 If you prefer, you can clone it and run the `setup.py` file as well. Use the following
 commands to get a copy from Github and do the installation:
 
-    git clone https://github.com/jamesbowman/openexrpython
+    git clone https://github.com/afichet/openexrpython.git
     pip install ./openexrpython
